@@ -3,9 +3,10 @@ import os
 
 # Get the directory of the current file
 current_dir = os.path.dirname(os.path.abspath(__file__))
+src_dir = os.path.dirname(current_dir) #src directory
 
 # Construct the absolute path to the JSON file
-FILE_NAME = os.path.join(current_dir, '..', 'json_db', 'records.json')
+FILE_NAME = os.path.join(src_dir, 'json_db', 'records.json')
 
 class RecordManager:
     """

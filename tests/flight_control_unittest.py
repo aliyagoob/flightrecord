@@ -4,16 +4,18 @@ import unittest
 from unittest.mock import patch, mock_open, call
 import sys
 
-# Adjust sys.path to include the parent directory
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-if parent_dir not in sys.path:
-    sys.path.insert(0, parent_dir)
+# Adjust sys.path to include the parent directory, & src Directory
+current_dir = os.path.dirname(os.path.abspath(__file__)) #tests directory
+parent_dir = os.path.dirname(current_dir) #Parent directory
+src_dir = os.path.join(parent_dir, "src") #Parent Director /src directory
+
+if src_dir not in sys.path:
+    sys.path.insert(0, src_dir)
 
 try:
-    from src.recordmanager.record_manager import RecordManager  # Import from parent directory
-except ModuleNotFoundError as e:
-    raise ImportError(f"Unable to import 'record_manager': {e}. Ensure 'record_manager.py' exists in the parent directory and is correctly named.")
+    from recordmanager.record_manager import RecordManager  # Import from the 'recordmanager' directory
+except ImportError as e:
+    print(f"Error importing 'RecordManager' validate location and the structure: {e}")
 
 # Get the directory of the current file
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -57,7 +59,17 @@ class flight_Control_unittest(unittest.TestCase):
             "Flights": [],
             "Airline Companies": [],
         }
+<<<<<<< Updated upstream
         self.record_manager.save_records(self.record_manager.records)
+=======
+        self.record_manager.save_records(self.record_manager.records)  # Pass the current records to save
+
+        # Construct the expected file path where records are being saved.
+        expected_file_path = os.path.normpath(os.path.join(parent_dir, 'src','recordmanager','..', 'json_db', 'records.json'))
+
+        # Assert that the `open` function was called with the correct arguments
+        mock_file.assert_called_once_with(expected_file_path, "w", encoding="utf-8")
+>>>>>>> Stashed changes
 
         # Verify the content written to the file
         expected_content = json.dumps(self.record_manager.records, indent=4)
